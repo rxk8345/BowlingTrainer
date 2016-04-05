@@ -33,23 +33,23 @@ class Line:
 def find_lane_edge(img):
 
     # less than half of the height of the image
-    minLineLength = img.shape[0] // 2.5
+    minLineLength = img.shape[0] // 3
     #
-    maxLineGap = minLineLength // 3.5
+    maxLineGap = minLineLength // 5
 
-    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     equalized = cv2.equalizeHist(gray)
 
-    ret, thresh = cv2.threshold(equalized,0,255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    ret, thresh = cv2.threshold(equalized, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY_INV)
     sub = np.subtract(thresh, equalized)
 
-    blur = cv2.GaussianBlur(sub,(9,9),0)
-    canny = cv2.Canny(blur, 80, 175, apertureSize=3)
+    blur = cv2.GaussianBlur(sub,(3,3),0)
+    canny = cv2.Canny(blur, 55, 175, apertureSize=3)
     # Low thresh - start with the possible lines
     # minLineLength - Long enough to be a lane edge
-    # maxLineGap - low 10 pixels because we expect the line to be solid
-    lines = cv2.HoughLinesP(canny, 1, np.pi/180, threshold=30, minLineLength=minLineLength, maxLineGap=maxLineGap )
+    # maxLineGap - low pixels because we expect the line to be solid
+    lines = cv2.HoughLinesP(canny, 1, np.pi/180, threshold=50, minLineLength=minLineLength, maxLineGap=maxLineGap )
 
     good_lines = []
 
