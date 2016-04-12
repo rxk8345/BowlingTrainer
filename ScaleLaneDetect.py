@@ -18,6 +18,7 @@ def scale_detect(img):
     width = width / factor
 
     scaled = cv2.resize(img, (width, height))
+    original_scaled = np.copy(scaled)
     blurred = cv2.bilateralFilter(scaled, 3, 100, 1)
     blurred = cv2.blur(blurred, (3,3), 0)
     cv2.imshow("blurred", blurred)
@@ -25,12 +26,11 @@ def scale_detect(img):
     edges = cv2.Canny(blurred, 40, 120)
     cv2.imshow("canny", edges)
 
-
     lines = cv2.HoughLinesP(edges, 1, np.pi/180, 40, minLineLength=40, maxLineGap=3);
 
     left, right = pick_lines(scaled, lines)
 
-    return scaled, left, right
+    return original_scaled, left, right
 
 
 def pick_lines(img, lines):

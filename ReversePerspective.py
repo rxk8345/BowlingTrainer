@@ -34,3 +34,5 @@ def reverse_rerspective( img, left, right ):
     transformed = cv2.warpPerspective(img, transMat, quad.shape)
 
     cv2.imshow("transformed", transformed)
+
+    return transformed
