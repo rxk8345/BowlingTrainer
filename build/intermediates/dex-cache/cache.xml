@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a1d2f0220e1e560bff71511bbc53895d2189e63f">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_490732082227b6176ae9693d49086626a017907a/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.3.0_b5c80f8b4324f565604f6008fe06f5c4322dc905/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.3.0_c427bdc9ae37717afed4132881b871df34245d6b/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a7a57985c1ce66542a66c621ce04080806186a93">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_9687078c33bbcaa48820f27cd82f7ad0fd50729f/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.3.0_4036b816833a7a56ce857f62db8dbe89531c16e5/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.3.0_d94fd872fbce0f6885c062445f0de5df0e951e9d/classes.dex" />
+    </item>
+    <item
+        jar="/usr/local/Cellar/android-sdk/24.0.2/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.3.0_5c7d0278c282228af3cbab7e3b7b34f81c8e6d0f/classes.dex" />
+    </item>
+    <item
+        jar="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="/Users/richykapadia/Documents/workspace/BowlingTrackerAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.3.0_29c72054c1e06bfcc35c778cb594baf41c85a25a/classes.dex" />
+    </item>
+
+</items>
