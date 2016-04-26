@@ -6,6 +6,7 @@ import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.CornerTracking;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
@@ -24,7 +25,7 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
     private Scalar GREEN = new Scalar(0,255,0);
     private Scalar BLUE = new Scalar(0,0,255);
     private Size imgSize;
-    private CornerTracking tracking = new CornerTracking();
+    private CornerTracking tracking;
 
     public MyCameraListener(CameraBridgeViewBase view){
         this.view = view;
@@ -32,42 +33,33 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
         this.view.setOnTouchListener(this.selector);
     }
 
+    public void initialize(){
+        tracking = new CornerTracking();
+    }
+
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat display = inputFrame.rgba();
-        if(imgSize == null && display != null){
-            imgSize = new Size();
-            imgSize.width = display.cols();
-            imgSize.height = display.width();
-        }
+        this.selector.setScreenSize( view.getWidth(), view.getHeight() );
+        this.selector.setImgSize(display.size());
 
-        Mat m = new Mat();
-
-        // Track here
-        tracking.detect(display, roi);
+        tracking.track(display);
 
 
         if( this.selector.getCurr() == RegionSelector.MODE.INIT ||
             this.selector.getCurr() == RegionSelector.MODE.DRAGGING){
-            Point[] pts = translateCoord();
-            Imgproc.rectangle(display, pts[0], pts[1], BLUE);
+            Point one = this.selector.getOne();
+            Point two = this.selector.getTwo();
+            Imgproc.rectangle(display, one, two, BLUE);
         }else if( this.selector.getCurr() == RegionSelector.MODE.RELEASE){
-
-            /*
-            Point[] pts = translateCoord();
-            Rect rect = new Rect(pts[0], pts[1]);
-            ArrayList<Point> trackThese = new ArrayList<>();
-            for(Point p : corners.toList()){
-                if(rect.contains(p)) {
-                    Imgproc.circle(display, p, 1, GREEN);
-                    trackThese.add(p);
-                }
-            }
-            */
-
+            // Track here
+            Point one = this.selector.getOne();
+            Point two = this.selector.getTwo();
+            Rect roi = new Rect(one, two);
+            tracking.detect(display, roi);
             this.selector.reset();
-
         }
+
 
         return display;
     }
@@ -79,35 +71,6 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
 
     @Override
     public void onCameraViewStopped() {
-
-    }
-
-    //TODO fix this shit! Mat size != screen view size
-    private Point[] translateCoord(){
-
-        Point one = this.selector.getOne();
-        Point two = this.selector.getTwo();
-
-        int cols = (int) imgSize.width;
-        int rows = (int) imgSize.height;
-
-        int xOffset = (this.view.getWidth() - cols) / 2;
-        int yOffset = (this.view.getHeight() - rows) / 2;
-
-        int x1 = (int) one.x - xOffset;
-        int y1 = (int) one.y - yOffset;
-
-        int x2 = (int) two.x - xOffset;
-        int y2 = (int) two.y - yOffset;
-
-        Point scaled_one = new Point(x1, y1);
-        Point scaled_two = new Point(x2, y2);
-
-        Point[] result = new Point[2];
-        result[0] = scaled_one;
-        result[1] = scaled_two;
-
-        return result;
 
     }
 

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         javaCameraView.setCvCameraViewListener(myCameraListener);
 
         // cv loader callback (enables view when lib is loaded)
-        loaderCallback = new LoaderCallback(this, javaCameraView);
+        loaderCallback = new LoaderCallback(this, javaCameraView, myCameraListener);
 
 
 
