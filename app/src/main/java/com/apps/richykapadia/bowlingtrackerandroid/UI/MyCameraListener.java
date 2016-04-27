@@ -2,6 +2,7 @@ package com.apps.richykapadia.bowlingtrackerandroid.UI;
 
 
 import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.CornerTracking;
+import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.HoughLines;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.core.Mat;
@@ -26,15 +27,19 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
     private Scalar BLUE = new Scalar(0,0,255);
     private Size imgSize;
     private CornerTracking tracking;
+    private HoughLines lines;
 
     public MyCameraListener(CameraBridgeViewBase view){
         this.view = view;
         this.selector = new RegionSelector();
         this.view.setOnTouchListener(this.selector);
+        this.view.enableFpsMeter();
     }
 
     public void initialize(){
         tracking = new CornerTracking();
+        lines = new HoughLines();
+
     }
 
     @Override
@@ -43,7 +48,7 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
         this.selector.setScreenSize( view.getWidth(), view.getHeight() );
         this.selector.setImgSize(display.size());
 
-        tracking.track(display);
+//        tracking.track(display);
 
 
         if( this.selector.getCurr() == RegionSelector.MODE.INIT ||
@@ -56,12 +61,14 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
             Point one = this.selector.getOne();
             Point two = this.selector.getTwo();
             Rect roi = new Rect(one, two);
-            tracking.detect(display, roi);
+//            tracking.detect(display, roi);
             this.selector.reset();
         }
 
 
-        return display;
+
+
+        return lines.detect(display);
     }
 
     @Override

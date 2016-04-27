@@ -136,13 +136,13 @@ public class CornerTracking {
         //homography for perspective transform
         if( trained.size() >= 4){
             //java is stupid
-            Point[] one_pt_array = new Point[trained.size()];
+            Point[] one_pt_array = new Point[queried.size()];
             int i = 0;
             for(KeyPoint kp : trained){
                 one_pt_array[i] = kp.pt;
                 i++;
             }
-            Point[] two_pt_array = new Point[queried.size()];
+            Point[] two_pt_array = new Point[trained.size()];
             i = 0;
             for(KeyPoint kp : trained){
                 two_pt_array[i] = kp.pt;
