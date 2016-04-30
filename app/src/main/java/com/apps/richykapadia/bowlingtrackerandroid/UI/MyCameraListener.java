@@ -1,81 +1,107 @@
 package com.apps.richykapadia.bowlingtrackerandroid.UI;
 
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.BallDetection;
 import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.CornerTracking;
-import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.HoughLines;
+import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.KeypointTracking;
+import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.LaneEdges;
+import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.PerspectiveTransform;
 
 import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.core.Core;
+import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
-import org.opencv.imgproc.Imgproc;
+import java.util.List;
 
-import java.util.ArrayList;
 
 /**
  * Created by richykapadia on 4/23/16.
  */
 public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    private CameraBridgeViewBase view;
-    private RegionSelector selector;
-    private Scalar RED = new Scalar(255,0,0);
-    private Scalar GREEN = new Scalar(0,255,0);
-    private Scalar BLUE = new Scalar(0,0,255);
-    private Size imgSize;
-    private CornerTracking tracking;
-    private HoughLines lines;
+    private final CameraBridgeViewBase view;
+    private final ImageView lane_overlay;
+    private final Activity activity;
 
-    public MyCameraListener(CameraBridgeViewBase view){
+    //algorithms
+    private KeypointTracking tracking;
+    private LaneEdges laneEdges;
+    private BallDetection ballDetection;
+    private PerspectiveTransform perspectiveTransform;
+
+    //State machine
+    private enum STATE {LANE_EDGE, PERSPECTIVE, DETECT_BALL, TRACKING}
+    private STATE curr_state = STATE.LANE_EDGE;
+
+    public MyCameraListener(CameraBridgeViewBase view, ImageView lane_overlay, Activity activity){
         this.view = view;
-        this.selector = new RegionSelector();
-        this.view.setOnTouchListener(this.selector);
+        this.lane_overlay = lane_overlay;
         this.view.enableFpsMeter();
+        this.activity = activity;
     }
 
     public void initialize(){
-        tracking = new CornerTracking();
-        lines = new HoughLines();
+        laneEdges = new LaneEdges();
+        tracking = new KeypointTracking();
+        perspectiveTransform = new PerspectiveTransform();
+        this.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                curr_state = STATE.PERSPECTIVE;
+            }
+        });
+
 
     }
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat display = inputFrame.rgba();
-        this.selector.setScreenSize( view.getWidth(), view.getHeight() );
-        this.selector.setImgSize(display.size());
 
-//        tracking.track(display);
+        switch ( curr_state ){
+            case LANE_EDGE:
+                laneEdges.detect(inputFrame.gray());
+                laneEdges.draw(display);
+                break;
+            case PERSPECTIVE:
+                Point[] corners = laneEdges.getCorners();
+                if(corners != null) {
+                    Mat lane = perspectiveTransform.transform(inputFrame.rgba(), corners);
+                    Bitmap bmp = Bitmap.createBitmap(lane.width(), lane.height(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(lane, bmp);
+                    this.activity.runOnUiThread( new DisplayOverlay(bmp, lane_overlay));
+                    this.ballDetection = new BallDetection(corners);
+                    this.curr_state = STATE.DETECT_BALL;
+                }else{
+                    this.curr_state = STATE.LANE_EDGE;
+                }
 
+                break;
+            case DETECT_BALL:
 
-        if( this.selector.getCurr() == RegionSelector.MODE.INIT ||
-            this.selector.getCurr() == RegionSelector.MODE.DRAGGING){
-            Point one = this.selector.getOne();
-            Point two = this.selector.getTwo();
-            Imgproc.rectangle(display, one, two, BLUE);
-        }else if( this.selector.getCurr() == RegionSelector.MODE.RELEASE){
-            // Track here
-            Point one = this.selector.getOne();
-            Point two = this.selector.getTwo();
-            Rect roi = new Rect(one, two);
-//            tracking.detect(display, roi);
-            this.selector.reset();
+                break;
+            case TRACKING:
+                tracking.draw(display);
+                break;
+            default:
+                break;
         }
 
 
-//        lines.detect(inputFrame.gray());
-//        lines.draw(display);
-//        Mat mask = lines.getRoi(inputFrame.rgba());
-//        if(mask != null){
-////            Core.bitwise_and(display, mask, display);
-//            mask.copyTo(display);
+//        Mat roi = laneEdges.getRoi(inputFrame.rgba());
+//        if(roi != null){
+//            //start tracking key points
+//            return roi;
 //        }
 
-        display = lines.testLine(inputFrame.gray());
 
 
 
@@ -92,5 +118,22 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
 
     }
 
+    private class DisplayOverlay implements Runnable{
+        private Bitmap bitmap;
+        private ImageView imageView;
+
+        public DisplayOverlay(Bitmap bmp, ImageView imageView){
+            this.bitmap = bmp;
+            this.imageView = imageView;
+        }
+
+        @Override
+        public void run(){
+            this.imageView.setImageBitmap(this.bitmap);
+            this.imageView.setVisibility(View.VISIBLE);
+
+        }
+
+    }
 
 }

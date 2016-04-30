@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.apps.richykapadia.bowlingtrackerandroid.UI.MyCameraListener;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main-Activity";
 
     private CameraBridgeViewBase javaCameraView;
+    private ImageView laneOverlay;
     private LoaderCallback loaderCallback;
     private MyCameraListener myCameraListener;
 
@@ -38,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         //grab ui element
         javaCameraView = (CameraBridgeViewBase) findViewById(R.id.main_camera_view);
+        laneOverlay = (ImageView) findViewById(R.id.lane_overlay);
         javaCameraView.setMaxFrameSize(360,480);
         javaCameraView.setVisibility(CameraBridgeViewBase.VISIBLE);
-        myCameraListener = new MyCameraListener(javaCameraView);
+        myCameraListener = new MyCameraListener(javaCameraView, laneOverlay, this);
         javaCameraView.setCvCameraViewListener(myCameraListener);
 
         // cv loader callback (enables view when lib is loaded)
