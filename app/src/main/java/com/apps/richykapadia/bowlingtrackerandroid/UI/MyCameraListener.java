@@ -5,6 +5,7 @@ import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.CornerTracking;
 import com.apps.richykapadia.bowlingtrackerandroid.Algorithm.HoughLines;
 
 import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -66,9 +67,19 @@ public class MyCameraListener implements CameraBridgeViewBase.CvCameraViewListen
         }
 
 
+//        lines.detect(inputFrame.gray());
+//        lines.draw(display);
+//        Mat mask = lines.getRoi(inputFrame.rgba());
+//        if(mask != null){
+////            Core.bitwise_and(display, mask, display);
+//            mask.copyTo(display);
+//        }
+
+        display = lines.testLine(inputFrame.gray());
 
 
-        return lines.detect(display);
+
+        return display;
     }
 
     @Override

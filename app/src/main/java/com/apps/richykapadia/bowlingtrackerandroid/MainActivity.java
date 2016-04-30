@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissionForCamera();
 
         //grab ui element
-        javaCameraView = (CameraBridgeViewBase) new JavaCameraView(this, -1);
-        setContentView(javaCameraView);
+        javaCameraView = (CameraBridgeViewBase) findViewById(R.id.main_camera_view);
         javaCameraView.setMaxFrameSize(360,480);
         javaCameraView.setVisibility(CameraBridgeViewBase.VISIBLE);
         myCameraListener = new MyCameraListener(javaCameraView);
